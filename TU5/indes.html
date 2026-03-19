@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 5 · HTML Images, Lists & Tables · CWHxMANMIT</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ------- Fluid & Adaptive Variables ------- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --surface-hover: #151515;
+      --border: #2a2a2a;
+      --blue: #5f8cff;
+      --blue-glow: rgba(95, 140, 255, 0.2);
+      --yellow: #ffd966;
+      --red: #f87171;
+      --green: #6fcf97;
+      --text-primary: #f0f0f0;
+      --text-secondary: #b0b3b8;
+      --code-bg: #0a0a0a;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7);
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --display: 'Syne', sans-serif;
+      --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Light Theme Overrides */
+    .light-mode {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: #cbd5e1;
+      --blue: #2563eb;
+      --blue-glow: rgba(37, 99, 235, 0.2);
+      --yellow: #fbbf24;
+      --red: #ef4444;
+      --green: #10b981;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --code-bg: #f1f5f9;
+      --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Universal Smooth Transitions */
+    body, .concept-card, .code-card, .summary-item, header, .code-header, .syntax-table th {
+      transition: background-color var(--transition-smooth), color var(--transition-smooth), border-color var(--transition-smooth);
+    }
+
+    .light-mode .day-pill {
+      background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      color: var(--blue); border-color: var(--blue);
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
+    }
+    .light-mode .output-area { background: #eef2f6; color: #1e293b; }
+    .light-mode .step-badge { background: linear-gradient(145deg, #e2e8f0, #cbd5e1); color: var(--blue); }
+    .light-mode .step-badge.tip-badge { color: #b45309; border-color: #fbbf24; }
+    .light-mode .step-badge.warn-badge { color: #b91c1c; border-color: #ef4444; }
+
+    body {
+      background: var(--bg); color: var(--text-primary);
+      font-family: var(--sans); line-height: 1.6;
+      font-size: clamp(14px, 1.5vw, 15.5px);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Hardware Accelerated Noise */
+    body::before {
+      content: ""; position: fixed; inset: 0;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMjUiIC8+PC9zdmc+');
+      pointer-events: none; z-index: 9999; opacity: 0.25;
+      will-change: transform; transform: translateZ(0); 
+    }
+
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #3a3f4a; border-radius: 20px; }
+
+    main.wrap { max-width: 1000px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 24px) 80px; }
+
+    header {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 28px);
+      display: flex; align-items: center; gap: 12px;
+      font-weight: 500; width: 100%;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .light-mode header { background: rgba(255, 255, 255, 0.7); border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+
+    .snake-icon {
+      font-size: clamp(24px, 4vw, 28px);
+      background: linear-gradient(135deg, #e34f26 0%, #e34f26 40%, #f06529 60%, #f06529 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 0 4px rgba(227,79,38,0.6));
+    }
+
+    .theme-toggle { margin-right: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; background: transparent;}
+    .theme-toggle:active, .day-pill:active, .nav-btn:active, .run-btn:active, .copy-btn:active, .day-grid-btn:active { transform: scale(0.95); }
+
+    .header-right { display: flex; align-items: center; gap: clamp(8px, 2vw, 12px); margin-left: auto; }
+    .circular-logo {
+      width: clamp(28px, 5vw, 36px); height: clamp(28px, 5vw, 36px);
+      border-radius: 40px; object-fit: cover; border: 2px solid var(--blue);
+      box-shadow: 0 0 8px var(--blue-glow); background: var(--surface);
+    }
+
+    .day-pill {
+      background: linear-gradient(145deg, #1f2535, #131725);
+      border: 1px solid var(--blue); color: var(--blue); font-family: var(--mono);
+      font-size: clamp(10px, 2vw, 12px); font-weight: 600; padding: 6px clamp(10px, 2vw, 16px);
+      border-radius: 40px; box-shadow: 0 0 12px rgba(95,140,255,0.3); cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+    }
+    .day-pill:hover { background: #1f2a3f; transform: translateY(-2px); }
+
+    .separator-x {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: clamp(20px, 3vw, 24px); height: clamp(20px, 3vw, 24px);
+      border-radius: 40px; background: rgba(95,140,255,0.1); border: 1px solid var(--blue);
+      color: var(--blue); font-size: clamp(12px, 2vw, 14px); font-weight: bold;
+      font-family: var(--mono); box-shadow: 0 0 6px var(--blue-glow);
+    }
+
+    .hero { padding: clamp(40px, 8vw, 64px) 0 clamp(24px, 5vw, 40px); text-align: center; }
+    .hero h1 {
+      font-family: var(--display); font-size: clamp(32px, 7vw, 62px); font-weight: 800; line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 0%, #bdd3ff 80%); -webkit-background-clip: text;
+      background-clip: text; color: transparent; letter-spacing: -0.02em;
+    }
+    .light-mode .hero h1 { background: linear-gradient(135deg, #0f172a 0%, #2563eb 80%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-meta { font-family: var(--mono); color: var(--text-secondary); margin-top: 12px; font-size: clamp(11px, 2vw, 13px); border-bottom: 1px dashed var(--border); display: inline-block; padding-bottom: 8px; }
+
+    /* Nav Buttons and Icons (RESTORED) */
+    .concept-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0 10px; padding: 10px 0; }
+    .nav-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+      font-family: var(--mono); font-size: clamp(11px, 2vw, 12px); padding: 6px clamp(12px, 3vw, 18px);
+      border-radius: 40px; cursor: pointer; transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .nav-btn i {
+      font-size: 12px;
+      color: var(--blue);
+      opacity: 0.8;
+    }
+    .nav-btn:hover { border-color: var(--blue); color: var(--text-primary); background: rgba(95,140,255,0.08); transform: translateY(-2px); }
+
+    section { scroll-margin-top: 100px; }
+
+    /* --- Continuous Two-Way Reveal Animation --- */
+    .reveal-item {
+      opacity: 0; 
+      transform: scale(0.96) translateY(10px);
+      transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-item.visible { 
+      opacity: 1; 
+      transform: scale(1) translateY(0); 
+    }
+
+    .sec-header { display: flex; align-items: baseline; gap: clamp(12px, 3vw, 18px); margin: clamp(40px, 8vw, 56px) 0 24px; }
+    .sec-num { font-family: var(--mono); font-size: clamp(11px, 2vw, 13px); font-weight: 700; color: var(--blue); background: rgba(95,140,255,0.1); border: 1px solid rgba(95,140,255,0.3); padding: 4px 14px; border-radius: 30px; white-space: nowrap; }
+    .sec-title { font-family: var(--display); font-size: clamp(20px, 4vw, 24px); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; }
+
+    /* Fluid Auto-fit Grid that respects absolute minimums */
+    .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+    .concept-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; border-left: 3px solid var(--blue); }
+    .concept-card:hover { transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3); }
+    
+    /* Concept Icons (RESTORED) */
+    .concept-title { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .concept-title i {
+      font-size: 16px;
+      width: 22px;
+      color: var(--blue);
+    }
+    .concept-body { color: var(--text-secondary); }
+    .concept-body code, .step-desc code, .summary-item code { font-family: var(--mono); font-size: 0.9em; background: var(--code-bg); color: var(--yellow); padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border); }
+
+    .code-showcase { display: flex; flex-direction: column; gap: 22px; }
+    .code-card { background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow); }
+    .code-header { display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: #0d0d0d; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .window-dots { display: flex; gap: 6px; }
+    .window-dots span { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red { background: #ff5f57; } .dot-yellow { background: #febc2e; } .dot-green { background: #28c840; }
+    .code-title { margin-left: 8px; font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+    
+    .action-buttons { margin-left: auto; display: flex; gap: 8px; }
+    .run-btn, .copy-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 4px 10px; border-radius: 30px; font-size: 11px; font-family: var(--mono); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 5px; }
+    .run-btn:hover, .run-btn.active { background: var(--green); border-color: var(--green); color: #000; }
+    .copy-btn:hover { background: var(--blue); border-color: var(--blue); color: #000; }
+    .code-card pre { padding: 20px; font-family: var(--mono); font-size: clamp(12px, 2vw, 13px); line-height: 1.7; overflow-x: auto; white-space: pre; background: var(--code-bg); margin: 0; border-bottom: 1px solid var(--border); }
+    .output-area { background: #0a0a0a; padding: 14px 20px; font-family: var(--mono); font-size: clamp(12px, 2vw, 13px); color: #b0e0b0; border-top: 1px solid var(--border); white-space: pre-wrap; display: none; animation: fadeIn 0.3s ease; }
+    .output-area.show { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    .kw { color: #c792ea; } .fn { color: #82aaff; } .str { color: #c3e88d; } .num { color: #f78c6c; } .cmt { color: #546e7a; font-style: italic; }
+
+    .syntax-table { border: 1px solid var(--border); border-radius: var(--radius-md); overflow-x: auto; }
+    .syntax-table table { width: 100%; border-collapse: collapse; background: var(--surface); min-width: 400px; }
+    .syntax-table th { background: #0d0d0d; font-family: var(--mono); font-size: 12px; color: var(--blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 14px 18px; text-align: left; }
+    .syntax-table td { padding: 12px 18px; border-top: 1px solid var(--border); color: var(--text-secondary); }
+    .syntax-table td:first-child { font-family: var(--mono); color: var(--yellow); }
+
+    .steps-container { display: flex; flex-direction: column; }
+    .step-item { display: flex; gap: 16px; }
+    .step-left { display: flex; flex-direction: column; align-items: center; width: 50px; flex-shrink: 0; }
+    .step-badge { width: 44px; height: 44px; background: linear-gradient(145deg, #202532, #12161f); border: 2px solid var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--blue); box-shadow: 0 0 10px var(--blue-glow); }
+    .step-badge.tip-badge { border-color: var(--yellow); color: var(--yellow); }
+    .step-badge.warn-badge { border-color: var(--red); color: var(--red); }
+    .step-line { width: 2px; background: var(--border); flex: 1; margin: 4px 0; min-height: 20px; }
+    .step-item:last-child .step-line { display: none; }
+    .step-content { padding: 4px 0 28px 8px; flex: 1; }
+    .step-title { font-family: var(--mono); font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .step-desc { color: var(--text-secondary); }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; }
+    .summary-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 18px; display: flex; gap: 12px; color: var(--text-secondary); }
+    .summary-item:hover { transform: translateX(4px); border-color: var(--blue); background: var(--surface-hover); }
+    .summary-item i { color: var(--green); font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+
+    footer { margin-top: 80px; border-top: 1px solid var(--border); padding: 28px; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center; z-index: 10000;
+      opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal-overlay.show { opacity: 1; visibility: visible; }
+    .modal-content {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto; padding: clamp(20px, 5vw, 28px);
+      position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      transform: scale(0.95) translateY(10px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.show .modal-content { transform: scale(1) translateY(0); }
+    .modal-close { position: absolute; top: 16px; right: 20px; background: transparent; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; transition: 0.2s; line-height: 1; }
+    .modal-close:hover { color: var(--red); transform: rotate(90deg); }
+    .modal-title { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+    .day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 10px; }
+    .day-grid-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-family: var(--mono); font-size: 12px; padding: 8px 4px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; text-align: center; white-space: nowrap; }
+    .day-grid-btn:hover { border-color: var(--blue); color: var(--text-primary); background: rgba(95,140,255,0.08); transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+<header>
+  <i class="fab fa-html5 snake-icon"></i>
+  <button class="theme-toggle day-pill" id="themeToggle" aria-label="Switch between dark and light mode">
+    <i class="fas fa-moon"></i>
+  </button>
+  <div class="header-right">
+    <span class="day-pill" id="dayPillBtn"><i class="far fa-calendar-alt" style="margin-right:6px;"></i>#TU. 05</span>
+    <img src="logo01.jpg" alt="logo 1" class="circular-logo">
+    <span class="separator-x">×</span>
+    <img src="logo02.jpg" alt="logo 2" class="circular-logo">
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero reveal-item">
+    <h1>HTML Images, Lists & Tables</h1>
+    <div class="hero-meta">📘 Tutorial 5 · SIGMA WEB DEVELOPMENT · CWHxMANMIT</div>
+  </div>
+
+  <div class="concept-nav reveal-item">
+    <a class="nav-btn" href="#concept-section"><i class="fas fa-cube"></i> Concept</a>
+    <a class="nav-btn" href="#code-section"><i class="fas fa-code"></i> Code</a>
+    <a class="nav-btn" href="#syntax-section"><i class="fas fa-hashtag"></i> Syntax</a>
+    <a class="nav-btn" href="#tips-section"><i class="fas fa-lightbulb"></i> Tips</a>
+    <a class="nav-btn" href="#walkthrough-section"><i class="fas fa-stairs"></i> Walkthrough</a>
+    <a class="nav-btn" href="#summary-section"><i class="fas fa-check-double"></i> Summary</a>
+  </div>
+
+  <section id="concept-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[01]</span><h2 class="sec-title">Concept explanations</h2></div>
+    <div class="concept-grid">
+      <div class="concept-card reveal-item"><div class="concept-title"><i class="fas fa-image"></i>HTML Images</div><div class="concept-body">Images are embedded in HTML using the <code>&lt;img&gt;</code> tag. It requires two main attributes: <code>src</code> (source path) and <code>alt</code> (alternative text). You can also provide width and height attributes to prevent layout shifts.</div></div>
+      <div class="concept-card reveal-item"><div class="concept-title"><i class="fas fa-table"></i>HTML Tables</div><div class="concept-body">Tables arrange data in rows and columns. Use <code>&lt;table&gt;</code> as the wrapper, <code>&lt;tr&gt;</code> for rows, <code>&lt;th&gt;</code> for headings, and <code>&lt;td&gt;</code> for data cells. Grouping is done with <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, and <code>&lt;tfoot&gt;</code>.</div></div>
+      <div class="concept-card reveal-item"><div class="concept-title"><i class="fas fa-arrows-alt"></i>Rowspan & Colspan</div><div class="concept-body">These attributes merge table cells. <code>colspan</code> spans a cell across multiple columns (horizontally), while <code>rowspan</code> spans a cell across multiple rows (vertically).</div></div>
+      <div class="concept-card reveal-item"><div class="concept-title"><i class="fas fa-list-ul"></i>HTML Lists</div><div class="concept-body">Lists structure itemized data. An Unordered List <code>&lt;ul&gt;</code> displays bullets, an Ordered List <code>&lt;ol&gt;</code> displays numbers/letters, and a Definition List <code>&lt;dl&gt;</code> displays terms and descriptions.</div></div>
+    </div>
+  </section>
+
+  <section id="code-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[02]</span><h2 class="sec-title">Code examples (from video)</h2></div>
+    <div class="code-showcase" id="code-container">
+      
+      <div class="code-card reveal-item" id="card-image">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">images.html</span>
+          <div class="action-buttons">
+            <button class="run-btn"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="kw">&lt;img</span> <span class="fn">src</span>=<span class="str">"image.png"</span> <span class="fn">alt</span>=<span class="str">"train image"</span> <span class="fn">width</span>=<span class="str">"230"</span><span class="kw">&gt;</span></pre>
+        <div class="output-data" style="display:none;">[Image displays here: Train picture with 230px width]</div>
+        <div class="output-area"></div>
+      </div>
+
+      <div class="code-card reveal-item" id="card-table">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">tables.html</span>
+          <div class="action-buttons">
+            <button class="run-btn"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="kw">&lt;table&gt;</span>
+  <span class="kw">&lt;caption&gt;</span>Employee Details<span class="kw">&lt;/caption&gt;</span>
+  <span class="kw">&lt;thead&gt;</span>
+    <span class="kw">&lt;tr&gt;</span>
+      <span class="kw">&lt;th&gt;</span>Name<span class="kw">&lt;/th&gt;</span>
+      <span class="kw">&lt;th&gt;</span>Designation<span class="kw">&lt;/th&gt;</span>
+      <span class="kw">&lt;th&gt;</span>Favorite Language<span class="kw">&lt;/th&gt;</span>
+    <span class="kw">&lt;/tr&gt;</span>
+  <span class="kw">&lt;/thead&gt;</span>
+  <span class="kw">&lt;tbody&gt;</span>
+    <span class="kw">&lt;tr&gt;</span>
+      <span class="kw">&lt;td&gt;</span>Harry<span class="kw">&lt;/td&gt;</span>
+      <span class="kw">&lt;td&gt;</span>Programmer<span class="kw">&lt;/td&gt;</span>
+      <span class="kw">&lt;td</span> <span class="fn">rowspan</span>=<span class="str">"2"</span><span class="kw">&gt;</span>Java<span class="kw">&lt;/td&gt;</span>
+    <span class="kw">&lt;/tr&gt;</span>
+    <span class="kw">&lt;tr&gt;</span>
+      <span class="kw">&lt;td</span> <span class="fn">colspan</span>=<span class="str">"2"</span><span class="kw">&gt;</span>Sam<span class="kw">&lt;/td&gt;</span>
+    <span class="kw">&lt;/tr&gt;</span>
+  <span class="kw">&lt;/tbody&gt;</span>
+<span class="kw">&lt;/table&gt;</span></pre>
+        <div class="output-data" style="display:none;">Name     | Designation | Favorite Language
+------------------------------------------
+Harry    | Programmer  | Java
+Sam (spans 2 columns)  | (merged above)</div>
+        <div class="output-area"></div>
+      </div>
+
+      <div class="code-card reveal-item" id="card-lists">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">lists.html</span>
+          <div class="action-buttons">
+            <button class="run-btn"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="cmt">&lt;!-- Unordered List --&gt;</span>
+<span class="kw">&lt;ul</span> <span class="fn">type</span>=<span class="str">"square"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;li&gt;</span>Harry<span class="kw">&lt;/li&gt;</span>
+  <span class="kw">&lt;li&gt;</span>Rohan<span class="kw">&lt;/li&gt;</span>
+  <span class="kw">&lt;li&gt;</span>Shubham<span class="kw">&lt;/li&gt;</span>
+<span class="kw">&lt;/ul&gt;</span>
+
+<span class="cmt">&lt;!-- Ordered List --&gt;</span>
+<span class="kw">&lt;ol</span> <span class="fn">type</span>=<span class="str">"A"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;li&gt;</span>Harry<span class="kw">&lt;/li&gt;</span>
+  <span class="kw">&lt;li&gt;</span>Rohan<span class="kw">&lt;/li&gt;</span>
+  <span class="kw">&lt;li&gt;</span>Shubham<span class="kw">&lt;/li&gt;</span>
+<span class="kw">&lt;/ol&gt;</span></pre>
+        <div class="output-data" style="display:none;">▪ Harry
+▪ Rohan
+▪ Shubham
+
+A. Harry
+B. Rohan
+C. Shubham</div>
+        <div class="output-area"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="syntax-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[03]</span><h2 class="sec-title">Syntax explained</h2></div>
+    <div class="syntax-table reveal-item">
+      <table><thead><tr><th>TAG / ATTRIBUTE</th><th>DESCRIPTION</th></tr></thead><tbody>
+        <tr><td>&lt;img&gt;</td><td>Embeds an image in the document</td></tr>
+        <tr><td>src=""</td><td>Specifies the path/URL to the image file</td></tr>
+        <tr><td>alt=""</td><td>Provides alternative text if the image fails to load</td></tr>
+        <tr><td>&lt;br&gt;</td><td>Inserts a single line break</td></tr>
+        <tr><td>&lt;table&gt;</td><td>Defines a table structure</td></tr>
+        <tr><td>&lt;tr&gt;</td><td>Defines a table row</td></tr>
+        <tr><td>&lt;td&gt; / &lt;th&gt;</td><td>Table Data (regular cell) / Table Heading (header cell)</td></tr>
+        <tr><td>colspan=""</td><td>Makes a cell span across multiple columns</td></tr>
+        <tr><td>rowspan=""</td><td>Makes a cell span across multiple rows</td></tr>
+        <tr><td>&lt;ul&gt; / &lt;ol&gt; / &lt;dl&gt;</td><td>Defines Unordered, Ordered, and Definition lists respectively</td></tr>
+        <tr><td>&lt;li&gt;</td><td>Defines a list item within ul or ol</td></tr>
+        <tr><td>&lt;dt&gt; / &lt;dd&gt;</td><td>Defines a term and a description inside a dl tag</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section id="tips-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[04]</span><h2 class="sec-title">Tips & Warnings</h2></div>
+    <div class="steps-container">
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">Always provide an <code>alt</code> attribute for images. It helps with SEO and displays text if the image link is broken.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">Providing <code>width</code> or <code>height</code> to images helps the browser allocate space, preventing layout shifts on page load.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">Semantically structure tables using <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, and <code>&lt;tfoot&gt;</code>. It helps with future CSS styling.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">Use Replit for coding on your mobile if your computer is slow or unavailable!</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">Do not specify BOTH width and height manually unless you are sure of the aspect ratio. Setting both incorrectly will stretch and distort your image.</div></div></div>
+    </div>
+  </section>
+
+  <section id="walkthrough-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[05]</span><h2 class="sec-title">Step-by‑step walkthrough</h2></div>
+    <div class="steps-container">
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">01</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Setup Environment</div><div class="step-desc">Create a new folder <code>video5</code>, open VS Code, create <code>index.html</code>, and type <code>!</code> to generate Emmet boilerplate.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">02</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Add an Image</div><div class="step-desc">Use the <code>&lt;img&gt;</code> tag. Include <code>src="image.png"</code> to link the file and set an <code>alt</code> description. Set the <code>width</code> to scale it properly.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">03</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Create a Basic Table</div><div class="step-desc">Write <code>&lt;table&gt;</code>. Add a table row <code>&lt;tr&gt;</code> with header cells <code>&lt;th&gt;</code> (Name, Designation, Language). Add data rows with <code>&lt;td&gt;</code>.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">04</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Merge Table Cells</div><div class="step-desc">Add <code>colspan="2"</code> to a <code>&lt;td&gt;</code> to make it span horizontally across 2 columns. Try <code>rowspan="2"</code> to merge cells vertically.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">05</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Group Table Sections</div><div class="step-desc">Wrap the header row in <code>&lt;thead&gt;</code>, the main data rows in <code>&lt;tbody&gt;</code>, and add a footer row wrapped in <code>&lt;tfoot&gt;</code>.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">06</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Create Lists</div><div class="step-desc">Create bullet points using <code>&lt;ul&gt;</code> and list items <code>&lt;li&gt;</code>. Experiment with ordered numbering by switching to <code>&lt;ol&gt;</code> and modifying the <code>type</code> attribute (e.g., "A", "i", "1").</div></div></div>
+    </div>
+  </section>
+
+  <section id="summary-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[06]</span><h2 class="sec-title">Quick summary</h2></div>
+    <div class="summary-grid">
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Images use the empty <code>&lt;img&gt;</code> tag, relying on <code>src</code> and <code>alt</code> attributes.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Setting just width or height on an image auto-adjusts the other dimension.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Tables are constructed row by row using the <code>&lt;tr&gt;</code> tag.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span><code>&lt;th&gt;</code> makes table text bold and centered (headers), while <code>&lt;td&gt;</code> holds standard data.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span><code>colspan</code> spans cells left-to-right; <code>rowspan</code> spans cells top-to-bottom.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span><code>&lt;caption&gt;</code> can be used to set a title immediately inside the <code>&lt;table&gt;</code> tag.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Unordered lists <code>&lt;ul&gt;</code> generate bullet points for non-sequential items.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Ordered lists <code>&lt;ol&gt;</code> generate automatic numbers/letters based on sequence.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>The <code>type</code> attribute changes bullet styles (circle, square) or numbering styles (A, i, 1).</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Definition lists <code>&lt;dl&gt;</code> pair terms (<code>&lt;dt&gt;</code>) with descriptions (<code>&lt;dd&gt;</code>).</span></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+   <i class="fab fa-html5" style="margin-right:8px;"></i>
+  Web Development · #TU. 05 · SIGMA WEB DEVELOPMENT · refined notes
+  <br><br>
+  <span style="color:var(--text-secondary);font-size:12px;">
+    Notes inspired by the tutorial by Code With Harry —
+    <a href="https://youtu.be/1BsVhumGlNc?si=pF8E_cEByIAphAHQ" target="_blank" style="color:var(--blue);text-decoration:none;">Visit the YT lecture of Tutorial 5</a>
+  </span>
+</footer>
+
+<div class="modal-overlay" id="dayModal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <div class="modal-title">📅 Select a Tutorial</div>
+    <div class="day-grid" id="dayGrid"></div>
+  </div>
+</div>
+
+<script>
+// --- Bulletproof Event Delegation for Buttons ---
+document.getElementById('code-container').addEventListener('click', function(e) {
+  const copyBtn = e.target.closest('.copy-btn');
+  if (copyBtn) {
+    if (copyBtn.classList.contains('active')) return; // Prevents fast-click overwrite bug
+    
+    const pre = copyBtn.closest('.code-card').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      const originalText = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
+      copyBtn.classList.add('active');
+      setTimeout(() => {
+        copyBtn.innerHTML = originalText;
+        copyBtn.classList.remove('active');
+      }, 2000);
+    });
+    return;
+  }
+
+  const runBtn = e.target.closest('.run-btn');
+  if (runBtn) {
+    const card = runBtn.closest('.code-card');
+    const outputDiv = card.querySelector('.output-area');
+    const hiddenOutput = card.querySelector('.output-data');
+    
+    if (outputDiv.classList.contains('show')) {
+      outputDiv.classList.remove('show');
+      runBtn.classList.remove('active');
+    } else {
+      outputDiv.textContent = hiddenOutput ? hiddenOutput.textContent.trim() : '✅ (no output)';
+      outputDiv.classList.add('show');
+      runBtn.classList.add('active');
+    }
+  }
+});
+
+// --- Two-Way Continuous Scroll Reveal ---
+document.addEventListener('DOMContentLoaded', function() {
+  const items = document.querySelectorAll('.reveal-item');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      } else {
+        entry.target.classList.remove('visible');
+      }
+    });
+  }, { 
+    threshold: 0.1, 
+    rootMargin: '0px 0px -10px 0px' 
+  });
+  
+  items.forEach(item => observer.observe(item));
+});
+
+// --- Modal & Theme Logic ---
+const modal = document.getElementById('dayModal');
+const dayGrid = document.getElementById('dayGrid');
+
+for (let i = 1; i <= 100; i++) {
+  const btn = document.createElement('button');
+  btn.className = 'day-grid-btn';
+  btn.textContent = `#TU. ${i.toString().padStart(2, '0')}`;
+  btn.addEventListener('click', () => { window.location.href = `https://manmit099.github.io/CWH100/Day${i}/`; });
+  dayGrid.appendChild(btn);
+}
+
+document.getElementById('dayPillBtn').addEventListener('click', () => modal.classList.add('show'));
+document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.remove('show'));
+modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  themeToggle.querySelector('i').className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+});
+</script>
+</body>
+</html>
+
