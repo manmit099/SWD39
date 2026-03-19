@@ -1,1 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 3 · Basic Structure of an HTML Website · CWHxMANMIT</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ------- Fluid & Adaptive Variables ------- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --surface-hover: #151515;
+      --border: #2a2a2a;
+      --blue: #5f8cff;
+      --blue-glow: rgba(95, 140, 255, 0.2);
+      --yellow: #ffd966;
+      --red: #f87171;
+      --green: #6fcf97;
+      --text-primary: #f0f0f0;
+      --text-secondary: #b0b3b8;
+      --code-bg: #0a0a0a;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7);
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --display: 'Syne', sans-serif;
+      --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Light Theme Overrides */
+    .light-mode {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: #cbd5e1;
+      --blue: #2563eb;
+      --blue-glow: rgba(37, 99, 235, 0.2);
+      --yellow: #fbbf24;
+      --red: #ef4444;
+      --green: #10b981;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --code-bg: #f1f5f9;
+      --shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Universal Smooth Transitions */
+    body, .concept-card, .code-card, .summary-item, header, .code-header, .syntax-table th {
+      transition: background-color var(--transition-smooth), color var(--transition-smooth), border-color var(--transition-smooth);
+    }
+
+    .light-mode .day-pill {
+      background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+      color: var(--blue); border-color: var(--blue);
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
+    }
+    .light-mode .output-area { background: #eef2f6; color: #1e293b; }
+    .light-mode .step-badge { background: linear-gradient(145deg, #e2e8f0, #cbd5e1); color: var(--blue); }
+    .light-mode .step-badge.tip-badge { color: #b45309; border-color: #fbbf24; }
+    .light-mode .step-badge.warn-badge { color: #b91c1c; border-color: #ef4444; }
+
+    body {
+      background: var(--bg); color: var(--text-primary);
+      font-family: var(--sans); line-height: 1.6;
+      font-size: clamp(14px, 1.5vw, 15.5px);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Hardware Accelerated Noise */
+    body::before {
+      content: ""; position: fixed; inset: 0;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wMjUiIC8+PC9zdmc+');
+      pointer-events: none; z-index: 9999; opacity: 0.25;
+      will-change: transform; transform: translateZ(0); 
+    }
+
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #3a3f4a; border-radius: 20px; }
+
+    main.wrap { max-width: 1000px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 24px) 80px; }
+
+    header {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 28px);
+      display: flex; align-items: center; gap: 12px;
+      font-weight: 500; width: 100%;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .light-mode header { background: rgba(255, 255, 255, 0.7); border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+
+    .snake-icon {
+      font-size: clamp(24px, 4vw, 28px);
+      background: linear-gradient(135deg, #e34f26 0%, #e34f26 40%, #f06529 60%, #f06529 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 0 4px rgba(227,79,38,0.6));
+    }
+
+    .theme-toggle { margin-right: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; background: transparent;}
+    .theme-toggle:active, .day-pill:active, .nav-btn:active, .run-btn:active, .copy-btn:active, .day-grid-btn:active { transform: scale(0.95); }
+
+    .header-right { display: flex; align-items: center; gap: clamp(8px, 2vw, 12px); margin-left: auto; }
+    .circular-logo {
+      width: clamp(28px, 5vw, 36px); height: clamp(28px, 5vw, 36px);
+      border-radius: 40px; object-fit: cover; border: 2px solid var(--blue);
+      box-shadow: 0 0 8px var(--blue-glow); background: var(--surface);
+    }
+
+    .day-pill {
+      background: linear-gradient(145deg, #1f2535, #131725);
+      border: 1px solid var(--blue); color: var(--blue); font-family: var(--mono);
+      font-size: clamp(10px, 2vw, 12px); font-weight: 600; padding: 6px clamp(10px, 2vw, 16px);
+      border-radius: 40px; box-shadow: 0 0 12px rgba(95,140,255,0.3); cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+    }
+    .day-pill:hover { background: #1f2a3f; transform: translateY(-2px); }
+
+    .separator-x {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: clamp(20px, 3vw, 24px); height: clamp(20px, 3vw, 24px);
+      border-radius: 40px; background: rgba(95,140,255,0.1); border: 1px solid var(--blue);
+      color: var(--blue); font-size: clamp(12px, 2vw, 14px); font-weight: bold;
+      font-family: var(--mono); box-shadow: 0 0 6px var(--blue-glow);
+    }
+
+    .hero { padding: clamp(40px, 8vw, 64px) 0 clamp(24px, 5vw, 40px); text-align: center; }
+    .hero h1 {
+      font-family: var(--display); font-size: clamp(32px, 7vw, 62px); font-weight: 800; line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 0%, #bdd3ff 80%); -webkit-background-clip: text;
+      background-clip: text; color: transparent; letter-spacing: -0.02em;
+    }
+    .light-mode .hero h1 { background: linear-gradient(135deg, #0f172a 0%, #2563eb 80%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-meta { font-family: var(--mono); color: var(--text-secondary); margin-top: 12px; font-size: clamp(11px, 2vw, 13px); border-bottom: 1px dashed var(--border); display: inline-block; padding-bottom: 8px; }
+
+    /* Nav Buttons and Icons */
+    .concept-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0 10px; padding: 10px 0; }
+    .nav-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+      font-family: var(--mono); font-size: clamp(11px, 2vw, 12px); padding: 6px clamp(12px, 3vw, 18px);
+      border-radius: 40px; cursor: pointer; transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .nav-btn i {
+      font-size: 12px;
+      color: var(--blue);
+      opacity: 0.8;
+    }
+    .nav-btn:hover { border-color: var(--blue); color: var(--text-primary); background: rgba(95,140,255,0.08); transform: translateY(-2px); }
+
+    section { scroll-margin-top: 100px; }
+
+    /* --- Continuous Two-Way Reveal Animation --- */
+    .reveal-item {
+      opacity: 0; 
+      transform: scale(0.96) translateY(10px);
+      transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-item.visible { 
+      opacity: 1; 
+      transform: scale(1) translateY(0); 
+    }
+
+    .sec-header { display: flex; align-items: baseline; gap: clamp(12px, 3vw, 18px); margin: clamp(40px, 8vw, 56px) 0 24px; }
+    .sec-num { font-family: var(--mono); font-size: clamp(11px, 2vw, 13px); font-weight: 700; color: var(--blue); background: rgba(95,140,255,0.1); border: 1px solid rgba(95,140,255,0.3); padding: 4px 14px; border-radius: 30px; white-space: nowrap; }
+    .sec-title { font-family: var(--display); font-size: clamp(20px, 4vw, 24px); font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; }
+
+    /* Fluid Auto-fit Grid that respects absolute minimums */
+    .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+    .concept-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; border-left: 3px solid var(--blue); }
+    .concept-card:hover { transform: translateY(-4px); border-color: var(--blue); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3); }
+    
+    /* Concept Icons */
+    .concept-title { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .concept-title i {
+      font-size: 16px;
+      width: 22px;
+      color: var(--blue);
+    }
+    .concept-body { color: var(--text-secondary); }
+    .concept-body code, .step-desc code, .summary-item code { font-family: var(--mono); font-size: 0.9em; background: var(--code-bg); color: var(--yellow); padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border); }
+
+    .code-showcase { display: flex; flex-direction: column; gap: 22px; }
+    .code-card { background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow); }
+    .code-header { display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: #0d0d0d; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .window-dots { display: flex; gap: 6px; }
+    .window-dots span { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red { background: #ff5f57; } .dot-yellow { background: #febc2e; } .dot-green { background: #28c840; }
+    .code-title { margin-left: 8px; font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+    
+    .action-buttons { margin-left: auto; display: flex; gap: 8px; }
+    .run-btn, .copy-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 4px 10px; border-radius: 30px; font-size: 11px; font-family: var(--mono); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 5px; }
+    .run-btn:hover, .run-btn.active { background: var(--green); border-color: var(--green); color: #000; }
+    .copy-btn:hover { background: var(--blue); border-color: var(--blue); color: #000; }
+    .code-card pre { padding: 20px; font-family: var(--mono); font-size: clamp(12px, 2vw, 13px); line-height: 1.7; overflow-x: auto; white-space: pre; background: var(--code-bg); margin: 0; border-bottom: 1px solid var(--border); }
+    .output-area { background: #0a0a0a; padding: 14px 20px; font-family: var(--mono); font-size: clamp(12px, 2vw, 13px); color: #b0e0b0; border-top: 1px solid var(--border); white-space: pre-wrap; display: none; animation: fadeIn 0.3s ease; }
+    .output-area.show { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    .kw { color: #c792ea; } .fn { color: #82aaff; } .str { color: #c3e88d; } .num { color: #f78c6c; } .cmt { color: #546e7a; font-style: italic; }
+
+    .syntax-table { border: 1px solid var(--border); border-radius: var(--radius-md); overflow-x: auto; }
+    .syntax-table table { width: 100%; border-collapse: collapse; background: var(--surface); min-width: 400px; }
+    .syntax-table th { background: #0d0d0d; font-family: var(--mono); font-size: 12px; color: var(--blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 14px 18px; text-align: left; }
+    .syntax-table td { padding: 12px 18px; border-top: 1px solid var(--border); color: var(--text-secondary); }
+    .syntax-table td:first-child { font-family: var(--mono); color: var(--yellow); }
+
+    .steps-container { display: flex; flex-direction: column; }
+    .step-item { display: flex; gap: 16px; }
+    .step-left { display: flex; flex-direction: column; align-items: center; width: 50px; flex-shrink: 0; }
+    .step-badge { width: 44px; height: 44px; background: linear-gradient(145deg, #202532, #12161f); border: 2px solid var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--blue); box-shadow: 0 0 10px var(--blue-glow); }
+    .step-badge.tip-badge { border-color: var(--yellow); color: var(--yellow); }
+    .step-badge.warn-badge { border-color: var(--red); color: var(--red); }
+    .step-line { width: 2px; background: var(--border); flex: 1; margin: 4px 0; min-height: 20px; }
+    .step-item:last-child .step-line { display: none; }
+    .step-content { padding: 4px 0 28px 8px; flex: 1; }
+    .step-title { font-family: var(--mono); font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .step-desc { color: var(--text-secondary); }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; }
+    .summary-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 18px; display: flex; gap: 12px; color: var(--text-secondary); }
+    .summary-item:hover { transform: translateX(4px); border-color: var(--blue); background: var(--surface-hover); }
+    .summary-item i { color: var(--green); font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+
+    footer { margin-top: 80px; border-top: 1px solid var(--border); padding: 28px; text-align: center; font-family: var(--mono); font-size: 12px; color: var(--text-secondary); }
+
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center; z-index: 10000;
+      opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal-overlay.show { opacity: 1; visibility: visible; }
+    .modal-content {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      width: 90%; max-width: 800px; max-height: 80vh; overflow-y: auto; padding: clamp(20px, 5vw, 28px);
+      position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      transform: scale(0.95) translateY(10px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.show .modal-content { transform: scale(1) translateY(0); }
+    .modal-close { position: absolute; top: 16px; right: 20px; background: transparent; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; transition: 0.2s; line-height: 1; }
+    .modal-close:hover { color: var(--red); transform: rotate(90deg); }
+    .modal-title { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+    .day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 10px; }
+    .day-grid-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-family: var(--mono); font-size: 12px; padding: 8px 4px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; text-align: center; white-space: nowrap; }
+    .day-grid-btn:hover { border-color: var(--blue); color: var(--text-primary); background: rgba(95,140,255,0.08); transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+<header>
+  <i class="fab fa-html5 snake-icon"></i>
+  <button class="theme-toggle day-pill" id="themeToggle" aria-label="Switch between dark and light mode">
+    <i class="fas fa-moon"></i>
+  </button>
+  <div class="header-right">
+    <span class="day-pill" id="dayPillBtn"><i class="far fa-calendar-alt" style="margin-right:6px;"></i>#TU. 03</span>
+    <img src="logo01.jpg" alt="logo 1" class="circular-logo">
+    <span class="separator-x">×</span>
+    <img src="logo02.jpg" alt="logo 2" class="circular-logo">
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero reveal-item">
+    <h1>Basic Structure of an HTML Website</h1>
+    <div class="hero-meta">📘 #TU. 3 · SIGMA WEB DEVELOPMENT · CWHxMANMIT</div>
+  </div>
+
+  <div class="concept-nav reveal-item">
+    <a class="nav-btn" href="#concept-section"><i class="fas fa-cube"></i> Concept</a>
+    <a class="nav-btn" href="#code-section"><i class="fas fa-code"></i> Code</a>
+    <a class="nav-btn" href="#syntax-section"><i class="fas fa-hashtag"></i> Syntax</a>
+    <a class="nav-btn" href="#tips-section"><i class="fas fa-lightbulb"></i> Tips</a>
+    <a class="nav-btn" href="#walkthrough-section"><i class="fas fa-stairs"></i> Walkthrough</a>
+    <a class="nav-btn" href="#summary-section"><i class="fas fa-check-double"></i> Summary</a>
+  </div>
+
+  <section id="concept-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[01]</span><h2 class="sec-title">Concept explanations</h2></div>
+    <div class="concept-grid">
+      <div class="concept-card reveal-item"><div class="concept-title"><i class="fas fa-layer-group"></i>HTML Structure</div><div class="concept-body">Every HTML document follows a fundamental structure containing the <code>&lt;!DOCTYPE html&gt;</code> declaration, followed by the root <code>&lt;html&gt;</code> tag which encompasses the <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code> sections. These elements formulate the skeleton of any website.</div></div>
+      <div class="concept-card reveal-item"><div class="concept-title"><i class="fas fa-code"></i>HTML Tags: Pair vs Self-Closing</div><div class="concept-body">There are two main types of tags in HTML. <strong>Pair Tags</strong> have an opening and closing tag (e.g., <code>&lt;body&gt;...&lt;/body&gt;</code>). <strong>Self-Closing Tags</strong> don't require a closing pair and end within themselves (e.g., <code>&lt;meta&gt;</code>).</div></div>
+      <div class="concept-card reveal-item"><div class="concept-title"><i class="fas fa-brain"></i>The Head Section</div><div class="concept-body">The <code>&lt;head&gt;</code> is essentially the brain of the webpage. It contains metadata, the page <code>&lt;title&gt;</code>, linked CSS stylesheets, and scripts that shouldn't be rendered as visible text on the actual page.</div></div>
+      <div class="concept-card reveal-item"><div class="concept-title"><i class="fas fa-search"></i>SEO & Meta Tags</div><div class="concept-body">Meta tags store data about the document (Metadata). Important attributes like <code>name="description"</code> inform Search Engines (like Google) what the page is about. Consistently setting an accurate title and description is a foundational SEO practice.</div></div>
+      <div class="concept-card reveal-item"><div class="concept-title"><i class="fas fa-info-circle"></i>Attributes</div><div class="concept-body">Attributes are key-value pairs placed inside tags to provide additional information about that tag. For example, in <code>&lt;html lang="en"&gt;</code>, <code>lang</code> is the attribute and <code>en</code> is the value indicating the document is in English.</div></div>
+    </div>
+  </section>
+
+  <section id="code-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[02]</span><h2 class="sec-title">Code examples (from video)</h2></div>
+    <div class="code-showcase" id="code-container">
+      
+      <div class="code-card reveal-item" id="card-html-boilerplate">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">index.html (Boilerplate)</span>
+          <div class="action-buttons">
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="cmt">&lt;!DOCTYPE html&gt;</span>
+<span class="kw">&lt;html</span> <span class="fn">lang=</span><span class="str">"en"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;head&gt;</span>
+    <span class="kw">&lt;meta</span> <span class="fn">charset=</span><span class="str">"UTF-8"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;meta</span> <span class="fn">name=</span><span class="str">"viewport"</span> <span class="fn">content=</span><span class="str">"width=device-width, initial-scale=1.0"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;meta</span> <span class="fn">name=</span><span class="str">"description"</span> <span class="fn">content=</span><span class="str">"This is a description for SEO"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;title&gt;</span>Code with Harry HTML<span class="kw">&lt;/title&gt;</span>
+    <span class="kw">&lt;link</span> <span class="fn">rel=</span><span class="str">"stylesheet"</span> <span class="fn">href=</span><span class="str">"style.css"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;/head&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+    <span class="cmt">&lt;!-- Page content goes here --&gt;</span>
+    <span class="kw">&lt;script</span> <span class="fn">src=</span><span class="str">"script.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></pre>
+        <div class="output-data" style="display:none;">(HTML boilerplate template)</div>
+        <div class="output-area"></div>
+      </div>
+
+      <div class="code-card reveal-item" id="card-alert-script">
+        <div class="code-header">
+          <div class="window-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+          <span class="code-title">script.js</span>
+          <div class="action-buttons">
+            <button class="run-btn"><i class="fas fa-play"></i> Run</button>
+            <button class="copy-btn"><i class="far fa-copy"></i> copy</button>
+          </div>
+        </div>
+        <pre><span class="fn">alert</span>(<span class="str">"hello"</span>);</pre>
+        <div class="output-data" style="display:none;">(Browser pop-up alert saying "hello")</div>
+        <div class="output-area"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="syntax-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[03]</span><h2 class="sec-title">Syntax explained</h2></div>
+    <div class="syntax-table reveal-item">
+      <table><thead><tr><th>SYNTAX</th><th>DESCRIPTION</th></tr></thead><tbody>
+        <tr><td>&lt;!DOCTYPE html&gt;</td><td>Declares the document as an HTML5 document.</td></tr>
+        <tr><td>&lt;html&gt;</td><td>The root element that wraps all content on the entire page.</td></tr>
+        <tr><td>&lt;head&gt;</td><td>Container for metadata, title, scripts, and stylesheets. Not visible on the page.</td></tr>
+        <tr><td>&lt;body&gt;</td><td>Defines the document's body. Contains all visible content (text, images, links).</td></tr>
+        <tr><td>&lt;title&gt;</td><td>Sets the title shown in the browser tab and used by search engines.</td></tr>
+        <tr><td>&lt;meta&gt;</td><td>Self-closing tag used to provide metadata like charset, description, and viewport settings.</td></tr>
+        <tr><td>&lt;link&gt;</td><td>Used to link external resources, typically CSS stylesheets.</td></tr>
+        <tr><td>&lt;script&gt;</td><td>Used to embed or link executable JavaScript code.</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <section id="tips-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[04]</span><h2 class="sec-title">Tips & Warnings</h2></div>
+    <div class="steps-container">
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">Copy-pasting boilerplate code (like basic HTML structures or forms) from trusted sites like MDN or codewithharry.com is perfectly fine. Focus your brainpower on the logic that makes your app unique.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">Changing the <code>&lt;title&gt;</code> and adding a descriptive <code>&lt;meta name="description"&gt;</code> is an excellent SEO practice.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge tip-badge"><i class="fas fa-lightbulb"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">Hover over attributes in VS Code (like <code>name="description"</code>) to read built-in documentation about what they do.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">When linking an HTML file with CSS/JS, if changes in CSS don't show up immediately in Live Preview, you might occasionally need to trigger a manual reload.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge warn-badge"><i class="fas fa-exclamation-triangle"></i></div><div class="step-line"></div></div><div class="step-content"><div class="step-desc">To preview your website on a mobile device, your PC's Wi-Fi network must be set to <strong>Private</strong>. It won't work on a Public network profile.</div></div></div>
+    </div>
+  </section>
+
+  <section id="walkthrough-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[05]</span><h2 class="sec-title">Step-by‑step walkthrough: Mobile Preview</h2></div>
+    <div class="steps-container">
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">01</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Open Terminal</div><div class="step-desc">Right-click in VS Code and open the terminal (or use Command Prompt / PowerShell).</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">02</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Find your IP Address</div><div class="step-desc">Type <code>ipconfig</code> and hit Enter. Look for the <strong>IPv4 address</strong> (e.g., <code>192.168.1.199</code>) and copy it.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">03</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Configure Live Preview</div><div class="step-desc">Open VS Code Settings, search for "Live Preview". Find the setting "Local IP host address to host your files on" and paste your copied IPv4 address.</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">04</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Set Network to Private</div><div class="step-desc">Go to your computer's Wi-Fi settings and ensure your network is set to "Private Network" (not Public).</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">05</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Restart and Preview</div><div class="step-desc">Restart VS Code. Right-click your HTML file and select "Show Preview".</div></div></div>
+      <div class="step-item reveal-item"><div class="step-left"><div class="step-badge">06</div><div class="step-line"></div></div><div class="step-content"><div class="step-title">Open on Mobile</div><div class="step-desc">Take your mobile phone (connected to the same Wi-Fi) and type your IP address and port into the browser (e.g., <code>192.168.1.199:5000</code> or <code>3000</code>) to view the live site.</div></div></div>
+    </div>
+  </section>
+
+  <section id="summary-section">
+    <div class="sec-header reveal-item"><span class="sec-num">[06]</span><h2 class="sec-title">Quick summary</h2></div>
+    <div class="summary-grid">
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>An HTML file generally follows a strict boilerplate structure: <code>&lt;!DOCTYPE&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code>.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Tags can be Pair Tags (with open/close counterparts) or Self-Closing Tags (like <code>&lt;meta&gt;</code>).</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>The <code>&lt;head&gt;</code> tag holds metadata, links to CSS, and the page title. It's crucial for SEO.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>The <code>&lt;body&gt;</code> tag contains everything visually presented on the web page.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Attributes inside tags (like <code>lang="en"</code>) define extra behavior or characteristics of the tag.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>Copy-pasting standard boilerplate code is a normal and efficient practice for developers.</span></div>
+      <div class="summary-item reveal-item"><i class="fas fa-check-circle"></i><span>You can preview your local VS Code environment on your smartphone by routing Live Preview through your IPv4 address over a Private Network.</span></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+   <i class="fab fa-html5" style="margin-right:8px;"></i>
+  Web Development · #TU. 03 · Sigma Web Dev · refined notes
+  <br><br>
+  <span style="color:var(--text-secondary);font-size:12px;">
+    Notes inspired by the tutorial by Code With Harry —
+    <a href="https://youtu.be/BGeDBfCIqas?si=MmiM62DuQDsEACBp" target="_blank" style="color:var(--blue);text-decoration:none;">Visit the YT lecture of #TU. 3</a>
+  </span>
+</footer>
+
+<div class="modal-overlay" id="dayModal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <div class="modal-title">📅 Select a #TU.</div>
+    <div class="day-grid" id="dayGrid"></div>
+  </div>
+</div>
+
+<script>
+// --- Bulletproof Event Delegation for Buttons ---
+document.getElementById('code-container').addEventListener('click', function(e) {
+  const copyBtn = e.target.closest('.copy-btn');
+  if (copyBtn) {
+    if (copyBtn.classList.contains('active')) return; // Prevents fast-click overwrite bug
+    
+    const pre = copyBtn.closest('.code-card').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      const originalText = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
+      copyBtn.classList.add('active');
+      setTimeout(() => {
+        copyBtn.innerHTML = originalText;
+        copyBtn.classList.remove('active');
+      }, 2000);
+    });
+    return;
+  }
+
+  const runBtn = e.target.closest('.run-btn');
+  if (runBtn) {
+    const card = runBtn.closest('.code-card');
+    const outputDiv = card.querySelector('.output-area');
+    const hiddenOutput = card.querySelector('.output-data');
+    
+    if (outputDiv.classList.contains('show')) {
+      outputDiv.classList.remove('show');
+      runBtn.classList.remove('active');
+    } else {
+      outputDiv.textContent = hiddenOutput ? hiddenOutput.textContent.trim() : '✅ (no output)';
+      outputDiv.classList.add('show');
+      runBtn.classList.add('active');
+    }
+  }
+});
+
+// --- Two-Way Continuous Scroll Reveal ---
+document.addEventListener('DOMContentLoaded', function() {
+  const items = document.querySelectorAll('.reveal-item');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      } else {
+        entry.target.classList.remove('visible');
+      }
+    });
+  }, { 
+    threshold: 0.1, 
+    rootMargin: '0px 0px -10px 0px' 
+  });
+  
+  items.forEach(item => observer.observe(item));
+});
+
+// --- Modal & Theme Logic ---
+const modal = document.getElementById('dayModal');
+const dayGrid = document.getElementById('dayGrid');
+
+for (let i = 1; i <= 100; i++) {
+  const btn = document.createElement('button');
+  btn.className = 'day-grid-btn';
+  btn.textContent = `#TU. ${i.toString().padStart(2, '0')}`;
+  btn.addEventListener('click', () => { window.location.href = `https://manmit099.github.io/CWH100/Tutorial${i}/`; });
+  dayGrid.appendChild(btn);
+}
+
+document.getElementById('dayPillBtn').addEventListener('click', () => modal.classList.add('show'));
+document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.remove('show'));
+modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  themeToggle.querySelector('i').className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+});
+</script>
+</body>
+</html>
 
